@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Weight Calc</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="//cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.7/processing.min.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      img {
+  width: 100px;
+  height: 100px;
+}
+
+    /* EOS */
+  </style>
+
+  <script id="insert"></script>
+
+
+</head>
+<body>
+    
+<head>
+  <style>
+    
+    .first_header-txt {
+      position: absolute;
+      top: 10px;
+      left: 550px;
+    }
+    .second_header-txt {
+      position: absolute;
+      top: 250px;
+      left: 550px;
+    }
+    .first-txt {
+      position: absolute;
+      top: -10px;
+      left: 550px;
+    }
+
+    .second-txt {
+      position: absolute;
+      top: 250px;
+      left: 550px;
+    }
+    .details {
+      position: absolute;
+      top: 400px;
+      left 50px;
+    }
+
+  </style>
+</head>
+
+<body>
+    <h3 class= "first_header-txt">
+      Net Weight (KG/LB)
+    </h3>
+    <h3 class="first-txt">
+      Temp1
+    </h3>
+    
+    <h3 class= "second_header-txt">
+      Gross Weight (KG/LB)
+    </h3>
+    <h3 class="second-txt">
+      Temp2
+    </h3>
+    <h3 class="details">
+      Temp3
+    </h3>
+
+</body>
+
+
+
+
+    <script type="text/javascript">//<![CDATA[
+
+
+var netWeight = window.prompt("Enter Net Weight(LB):", "0");
+var grossWeight = window.prompt("Enter Gross Weight(LB):", "0");
+var netWeightKG = Math.trunc(netWeight * 2.2);
+var grossWeightKG = Math.trunc(grossWeight * 2.2);
+var details = window.prompt("Enter details(optional):", "none");
+function chumpage() {
+  chump = document.getElementsByClassName("first-txt");
+  chump2 = document.getElementsByClassName("second-txt");
+  chump3 = document.getElementsByClassName("details");
+  chump[0].style.fontSize = "100px";
+  chump2[0].style.fontSize = "100px";
+  chump3[0].style.fontSize = "50px";
+  for (var i = 0; i < chump.length; i++) {
+    chump[i].innerText = netWeight + '/' + netWeightKG;
+    chump2[i].innerText = grossWeight + '/' + grossWeightKG;
+    chump3[i].innerText = details;
+  }
+}
+chumpage();
+
+
+  //]]></script>
+
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "vhda6tjb"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+
+
+</body>
+</html>
