@@ -1,0 +1,193 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+<!-- <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script> --> <!-- --##### REMOVED -->
+<script src="http://mrrio.github.io/jsPDF/dist/jspdf.min.js"></script>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+
+  <style id="compiled-css" type="text/css">
+      img {
+  width: 100px;
+  height: 50px;
+}
+    /* EOS */
+  </style>
+
+  <script id="insert"></script>
+
+
+</head>
+
+<body>
+    <head>
+  <style>
+      @CHARSET "UTF-8";
+    .page-break {
+      page-break-after: always;
+      page-break-inside: avoid;
+      clear:both;
+    }
+    .page-break-before {
+      page-break-before: always;
+      page-break-inside: avoid;
+      clear:both;
+    }
+    #html-2-pdfwrapper{
+      position: absolute; 
+      left: 20px; 
+      top: 50px; 
+      bottom: 0; 
+      overflow: auto; 
+      width: 600px;
+    }
+   
+  </style>
+</head>
+
+<body>
+    <button onclick="generate()">Generate PDF</button>
+  <div id="html-2-pdfwrapper">
+    <h3 class= "first_header-txt">
+      Net Weight (KG/LB)
+    </h3>
+    <h3 class="first-txt">
+      Temp1
+    </h3>
+    
+    <h3 class= "second_header-txt">
+      Gross Weight (KG/LB)
+    </h3>
+    <h3 class="second-txt">
+      Temp2
+    </h3>
+    <h3 class="details">
+      Temp3
+    </h3>
+    <div>
+</body>
+
+
+    
+<script>
+    margins = {
+      top: 70,
+      bottom: 40,
+      left: 30,
+      width: 550
+    };
+  var pdf = new jsPDF('p', 'pt', 'a4');
+  pdf.setFontSize(18);
+  function addPage() {
+    pdf.addPage();
+    pdf.fromHTML(document.getElementById('html-2-pdfwrapper'), 
+
+    {
+    'x' : margins.left, // x coord
+    'y' : margins.top,
+    'width' : margins.width,// max width of content on PDF
+    'callback' : function(pdf) {
+        pdf.save('NetWeight.pdf');
+        pdf.output('dataurlnewwindow');
+    }
+
+    });
+  }
+  var ExcelToJSON = function() {
+
+    this.parseExcel = function(file) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        var data = e.target.result;
+        var workbook = XLSX.read(data, {
+          type: 'binary'
+        });
+        workbook.SheetNames.forEach(function(sheetName) {
+          // Here is your object
+          var XL_row_object = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+          var json_object = JSON.stringify(XL_row_object);
+          console.log(JSON.parse(json_object));
+          var obj = JSON.parse(json_object);
+          var length = obj.length;
+          for (var i = 0; i < length; i++) {
+                var netWeight = obj[i]["netWeight"];
+                var grossWeight = obj[i]["grossWeight"];
+                var details = obj[i]["details"];
+                chumpage(netWeight, grossWeight, details);
+          }
+        })
+      };
+ 
+      reader.onerror = function(ex) {
+        console.log(ex);
+      };
+
+      reader.readAsBinaryString(file);
+    };
+  };
+  function chumpage(netWeight, grossWeight, details) {
+    var netWeight = netWeight;
+    var grossWeight = grossWeight;
+    var details = details;
+    var netWeightKG = Math.trunc(netWeight * 2.2);
+    var grossWeightKG = Math.trunc(grossWeight * 2.2);
+  chump = document.getElementsByClassName("first-txt");
+  chump2 = document.getElementsByClassName("second-txt");
+  chump3 = document.getElementsByClassName("details");
+  chump[0].style.fontSize = "100px";
+  chump2[0].style.fontSize = "100px";
+  chump3[0].style.fontSize = "50px";
+  for (var i = 0; i < chump.length; i++) {
+    chump[i].innerText = netWeight + '/' + netWeightKG;
+    chump2[i].innerText = grossWeight + '/' + grossWeightKG;
+    chump3[i].innerText = details;
+    addPage();
+  }
+}
+  function handleFileSelect(evt) {
+
+    var files = evt.target.files; // FileList object
+    var xl2json = new ExcelToJSON();
+    xl2json.parseExcel(files[0]);
+  }
+
+  generate = function()
+{   
+  var iframe = document.createElement('iframe');
+  iframe.setAttribute('style','position:absolute;right:0; top:0; bottom:0; height:100%; width:650px; padding:20px;');
+  document.body.appendChild(iframe);
+  
+  iframe.src = pdf.output('datauristring');
+};
+</script>
+
+<form enctype="multipart/form-data">
+  <input id="upload" type=file name="files[]">
+</form>
+
+
+
+<script>
+  document.getElementById('upload').addEventListener('change', handleFileSelect, false);
+</script>
